@@ -183,9 +183,8 @@ void adxl_read(uint16_t CS, int pos[]){
 	pos[2] = entero16_to32(pos_16[2]);
 	
 	for(int i=0;i<3;i++){
-		printf("%4d\t",pos[i]);
+		//printf("%4d\t",pos[i]);
 	}
-	printf("\n\r");
 	
 }
 /** \brief Convierte un numero en complemento a 2 de 16 bits en uno de 32, en el caso de que el bit numero 15 se 1
@@ -333,6 +332,16 @@ int selector_joy(int x,int y){
 
 	return sol;
 }
+
+void greeting(){
+	printf("\fStarting");
+	for(int i = 0; i < 10; i++){
+		printf(".");
+		HAL_Delay(200);
+	}
+	printf("Done\n\r");
+}
+
 /* USER CODE END 0 */
 
 int main(void)
@@ -366,11 +375,12 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	
 	init_SPI(GPIO_PIN_4);
-	//init_SPI(GPIO_PIN_5);
+	init_SPI(GPIO_PIN_5);
 	
 	int out_adxl[3];
 	int adxl_fitrada[3];
 	
+	greeting();
 	
   /* USER CODE END 2 */
 
@@ -382,14 +392,19 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 		//lectura_SPI();
+		printf("GPIO_PIN_4\t");
 		adxl_read(GPIO_PIN_4,out_adxl);
-		
+			
+		//printf("\tGPIO_PIN_5\t");
 		//adxl_read(GPIO_PIN_5,out_adxl);
+				
+		//printf("\n\r");
+		
+		estabilizador(mx,out_adxl,adxl_fitrada,2);
+		for(int i = 0; i<3; i++){
+			printf("%4d\t",adxl_fitrada[i]);
+		}
 		printf("\n\r");
-		
-		//printf("%d  -  %d  -  %d\n\r",pos[0],pos[1],pos[2]);
-		
-		//estabilizador(mx,out_adxl,adxl_fitrada,2);
 
 		//selector_joy(adxl_fitrada[0],adxl_fitrada[1]);
 		//selector_pie(adxl_fitrada[0]);
@@ -405,7 +420,7 @@ int main(void)
 		
 #endif
 		
-		HAL_Delay(500);
+		HAL_Delay(100);
 
   }
   /* USER CODE END 3 */
